@@ -26,15 +26,17 @@ looker = LookerApi(host=my_host,
 #add role to get access to core model
 
 roles = looker.get_user_role(user_id,"id")
+
+
 roles_source = roles.copy()
 roles.append({"id":role_to_add_id})
 
-looker.set_user_role(user_id,roles)
-
+looker.set_user_role(user_id,[role['id'] for role in roles])
+looker.get_user_role(user_id)
 #begin issuing calls as the user who needs to catch up to production
 
 looker.login_user(user_id)
-
+looker.get_me()
 looker.update_session_workspace()
 
 looker.switch_git_branch(project_name,branch_name)
@@ -51,4 +53,4 @@ admin_looker = LookerApi(host=my_host,
 #
 # # #remove role added
 #
-admin_looker.set_user_role(user_id,body=roles_source)
+admin_looker.set_user_role(user_id,body=[role['id'] for role in roles_source])
