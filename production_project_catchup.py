@@ -31,17 +31,17 @@ roles = looker.get_user_role(user_id,"id")
 roles_source = roles.copy()
 roles.append({"id":role_to_add_id})
 
-looker.set_user_role(user_id,[role['id'] for role in roles])
-looker.get_user_role(user_id)
-#begin issuing calls as the user who needs to catch up to production
+try:
+    looker.set_user_role(user_id,[role['id'] for role in roles])
+    #begin issuing calls as the user who needs to catch up to production
+    looker.login_user(20000)
+    looker.update_session_workspace()
+    looker.switch_git_branch(project_name,branch_name)
+    looker.reset_to_production(project_name)
 
-looker.login_user(user_id)
-looker.get_me()
-looker.update_session_workspace()
-
-looker.switch_git_branch(project_name,branch_name)
-
-looker.reset_to_production(project_name)
+except:
+    print('Production reset failed. Resetting roles.')
+    pass
 #
 # #might need to use ref  in production catch up rather than reset to prod but seems fine in testing
 # #alternate would be PUT /projects/{project_id}/git_branch with  {"ref":"master_ref"} as body which we could get as the admin
@@ -52,5 +52,6 @@ admin_looker = LookerApi(host=my_host,
                  secret = my_secret)
 #
 # # #remove role added
-#
-admin_looker.set_user_role(user_id,body=[role['id'] for role in roles_source])
+
+roles.remove({"id":role_to_add_id})
+admin_looker.set_user_role(user_id,body=[role['id'] for role in roles])
