@@ -34,7 +34,7 @@ roles.append({"id":role_to_add_id})
 try:
     looker.set_user_role(user_id,[role['id'] for role in roles])
     #begin issuing calls as the user who needs to catch up to production
-    looker.login_user(20000)
+    looker.login_user(user_id)
     looker.update_session_workspace()
     looker.switch_git_branch(project_name,branch_name)
     looker.reset_to_production(project_name)
