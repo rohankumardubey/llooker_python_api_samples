@@ -137,7 +137,23 @@ class LookerApi(object):
         if r.status_code == requests.codes.ok:
             return r.json()
 
-
+    # GET /running_queries
+    def get_running_queries(self, fields=[]):
+        url = '{}{}'.format(self.host,'running_queries')
+        r = self.session.get(url)
+        if r.status_code == requests.codes.ok:
+            return r.json()
+        else:
+            return r
+    #DELETE /running_queries/{query_task_id}
+    def kill_query(self, query_task_id):
+        url = '{}{}/{}'.format(self.host,'running_queries', query_task_id)
+        r = self.session.delete(url)
+        if r.status_code == requests.codes.ok:
+            return r.json()
+        else:
+            return r
+        
       #GET      queries/run/
     def run_query(self,query_id):
             url = '{}{}/{}/run/json'.format(self.host,'queries',query_id)
