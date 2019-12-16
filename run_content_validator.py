@@ -75,8 +75,11 @@ for item in broken_content:
         parent_space_url = '{}/spaces/{}'.format(host_url,
                                                  parent_space_id
                                                  )
-        parent_space = next(item for item in space_data if item['id'] == parent_space_id)
-        parent_space_name = parent_space['name']
+        parent_space = next((item for item in space_data if item['id'] == parent_space_id), None)
+        if parent_space:
+            parent_space_name = parent_space['name']
+        else:
+            parent_space_name = None
     data = {
             'type' : type,
             'name' : name,
