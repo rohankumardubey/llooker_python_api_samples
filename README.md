@@ -1,3 +1,39 @@
+
+
+
+
+
+
+
+# ! WARNING !
+## This repository has been DEPRECATED. Please see the new Python SDK examples at https://github.com/looker-open-source/sdk-examples/tree/master/python
+
+Scroll down if you are sure this is where you need to be.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Python API Samples
 Python examples of how to use the Looker API
 
