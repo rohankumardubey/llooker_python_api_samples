@@ -34,16 +34,7 @@ Scroll down if you are sure this is where you need to be.
 
 
 
-# Python API Samples
-Python examples of how to use the Looker API
 
-## What you can find here
-- A simple Looker API 3.1 SDK
-- A sample config.yml file for collecting API Tokens/Secrets
-- Sample files of various tasks using the API
-
-## Relevant Articles
-**Moving Looks**: https://discourse.looker.com/t/moving-a-look-between-looker-servers-using-the-looker-api-and-the-python-requests-library/
 
 ## Getting Started
 - Copy at minimum the configration_sample.yml and lookerapi.py files.
