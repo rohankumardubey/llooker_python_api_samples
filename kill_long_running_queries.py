@@ -1,9 +1,16 @@
 
 import yaml ### install the pyyaml package
+import logging
 from lookerapi import LookerApi
 from datetime import datetime
 from pprint import pprint
 from pytz import timezone
+import logging
+logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S',
+    filename='query_kills.log'
+)
 
 ### ------- HERE ARE PARAMETERS TO CONFIGURE -------
 # Set the host that you'd like to access (as aliased in config.yml)
@@ -48,22 +55,24 @@ looker = LookerApi(host=my_host,
 queries = looker.get_running_queries()
 
 
-kill_count = 0
+
 for i in queries:
     query_created_at = datetime.strptime(
-        i['created_at'].replace('T',' '), '%Y-%m-%d %H:%M:%S.%f+00:00'
+        i['created_at'].split('.')[0].replace('T',' '),
+        '%Y-%m-%d %H:%M:%S'
     )
-    tz = i['query']['query_timezone']
-    # Compare query start time with system time.
-    # Need to ensure timezones are setup correctly
     source = i['source']
+    history_id = i['id']
+    # Assumes system time is in UTC
+    # Small, negative query running times can be expected if system times differ across the Looker MySQL database
+    # and the machine from which the script is being executed
     running_time = (
-        datetime.utcnow().astimezone(timezone('UTC')) -
-        query_created_at.astimezone(timezone(tz))
-        ).total_seconds()
-    print(running_time)
+        datetime.utcnow() -
+        query_created_at).total_seconds()
     if running_time > threshold and source not in sources_to_exclude:
         print('killing query: {}'.format(i['query_task_id']))
         looker.kill_query(i['query_task_id'])
-        kill_count +=1
-print('Killed {} queries'.format(kill_count))
+        logging.warning(
+        "Killed query with history_id {}. Runtime exceed threshold of {} secods. Runtime at time of killing: {}".format(
+            history_id, threshold, running_time
+         ))  

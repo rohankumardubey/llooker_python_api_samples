@@ -1,5 +1,6 @@
 *.pyc
 *.csv
 *.json
+*.log
 config.yml
 .idea

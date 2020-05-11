@@ -153,7 +153,7 @@ class LookerApi(object):
             return r.json()
         else:
             return r
-        
+
       #GET      queries/run/
     def run_query(self,query_id):
             url = '{}{}/{}/run/json'.format(self.host,'queries',query_id)
@@ -627,4 +627,12 @@ class LookerApi(object):
         url = '{}{}/{}'.format(self.host,'projects',project_id)
         r = self.session.get(url)
         if r.status_code == requests.codes.ok:
+            return r.json()
+
+  #GET /projects/{project_id}
+    def get_projects(self):
+        url = '{}{}'.format(self.host,'projects')
+        r = self.session.get(url)
+        if r.status_code == requests.codes.ok:
+            print(r.status_code)
             return r.json()
